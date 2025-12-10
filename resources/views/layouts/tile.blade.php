@@ -10,8 +10,10 @@
 
          @fluxAppearance
     </head>
-    <body class=" class="min-h-screen bg-white dark:bg-zinc-800 antialiased">
-        @livewire('common.menu',['tile'])
+    <body class="min-h-screen bg-white dark:bg-zinc-800 antialiased">
+        <livewire:common.menu :tile="__('tile')">
+            {{$slot}}
+        </livewire:common.menu>
         @fluxScripts
     </body>
 </html>

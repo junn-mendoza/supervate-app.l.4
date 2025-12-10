@@ -8,6 +8,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+// tile
 Route::livewire('ideas', 'pages::ideas.generate')->name('ideas');
 Route::livewire('customers', 'pages::customers.generate')->name('customers');
 Route::livewire('problems', 'pages::problems.generate')->name('problems');
@@ -19,6 +20,8 @@ Route::livewire('customerinterview', 'pages::customerinterviews.generate')->name
 Route::livewire('audioanalyses', 'pages::audioanalyses.generate')->name('audioanalyses');
 Route::livewire('projectexport', 'pages::projectexports.generate')->name('projectexport');
 Route::livewire('projects', 'pages::projectoverview.list')->name('projects');
+Route::livewire('template', 'pages::template.generate')->name('template');
+
 Route::livewire('favourites', 'pages::favourites.table')->name('favourites');
 Route::livewire('sharedwithme', 'pages::sharewithme.table')->name('sharedwithme');
 Route::livewire('dashboard', 'pages::dashboard.view')->name('dashboard');
@@ -26,7 +29,8 @@ Route::livewire('dashboard', 'pages::dashboard.view')->name('dashboard');
 Route::livewire('settings', 'pages::settings.view')->name('settings');
 Route::livewire('help', 'pages::help.view')->name('help');
 Route::livewire('upgrade', 'pages::upgrade.view')->name('upgrade');
-
+// test
+Route::livewire('test', 'pages::test.test')->name('test');
 
 // Route::view('dashboard', 'dashboard')
 //     ->middleware(['auth', 'verified'])

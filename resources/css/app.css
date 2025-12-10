@@ -64,3 +64,15 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+[data-flux-kanban-column] {
+    @apply w-full;
+}
+
+[data-flux-kanban-column] div{
+    @apply w-full max-w-full;
+}
+
+[data-flux-kanban] {
+    @apply gap-2 max-w-[1600px]
+}

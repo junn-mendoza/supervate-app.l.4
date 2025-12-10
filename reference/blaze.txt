@@ -1,0 +1,90 @@
+https://github.com/mvaliolahi/blaze
+
+1. Installation
+Install Blaze via Composer:
+composer require mvaliolahi/blaze
+
+2. Configuration
+Add blaze_id to your EncryptCookies middleware like this:
+class EncryptCookies extends Middleware
+{
+    protected $except = [
+        'blaze_id',
+    ];
+}
+
+3. Adding Blaze to Routes
+Blaze introduces two types of caching: private and public.
+
+Private Routes: These routes are personalized and may display user-specific content. Use the blaze:private middleware to mark routes as private.
+Public Routes: These routes are static and serve the same content to all users. Use the blaze:public middleware to mark routes as public.
+Example:
+
+Route::get('/profile', [ProfileController::class, 'show'])->middleware('blaze:private');
+Route::get('/posts', [PostController::class, 'index'])->middleware('blaze:public');
+
+Difference between blaze:private and blaze:public
+Private Routes (blaze:private): These routes are personalized and may display user-specific content. Blaze stores separate cache files for each user, identified by a unique blaze_id cookie. Changes to user-specific data invalidate the cache for that user only.
+Public Routes (blaze:public): These routes serve static content to all users. Blaze generates a single cache file for each public route, optimizing performance by serving pre-rendered HTML files.
+
+4. Config the model for invalidating and refreshing the cache
+Model Integration:
+
+Add the Blaze trait to your models to enable dynamic content generation.
+Define which routes should be invalid and whether they are public or private in the $blaze property of your models.
+Cache Invalidation:
+
+Blaze observes model changes and invalidates cache files associated with affected routes, ensuring content remains up-to-date.
+Examples
+Below is an example of how you can integrate Blaze into your Laravel models for dynamic-static fusion:
+class Page extends Model
+{
+    use Blaze;
+
+    protected $blaze_refresh = true;
+
+    protected $blaze = [
+        'private' => ['profile', 'settings'],
+        'public'  => ['homepage', 'posts.index'],
+    ];
+}
+Define blaze_refresh = true, which will automatically update the cache by calling related routes regarding the $blaze array, note that enabling this feature may affect response time.
+
+5. Nginx Config
+Add below map inside http {}
+  # Map to replace forward slashes with underscores
+  map $uri $sanitized_uri {
+    ~/(.*) _$1;
+    default $uri;
+  }
+
+  # Define a variable based on the presence of the blaze_id cookie
+  map $http_cookie $blaze_id {
+    default "";
+    "~*blaze_id=([^;]+)(?:;|$)" $1;
+  }
+After that change / location to:
+
+location / {
+    etag off;
+    
+    # 1. All method except GET must be proxied to PHP-FPM (post, put, patch, delete)
+    if ($request_method !~ ^(GET)$ ) {
+        rewrite ^ /index.php$query_string last;
+    }
+
+    # 2. detect blaze identifier using map
+    # 3. Sanitize the URI for match cache file using map.
+    rewrite ^/(.*)[/?&=](.*)$ /$1_$2;
+
+    # 4. Set the paths for private and public cache files
+    set $private_cache_file "/cache/${blaze_id}_${sanitized_uri}?${query_string}.html";
+    set $public_cache_file "/cache/public_${sanitized_uri}?${query_string}.html";
+
+    # 5. Try to serve the private cached file if it exists, then the public cached file, and finally index.php
+    try_files $private_cache_file $public_cache_file /index.php?$query_string;
+}
+TODO
+[] Artisan command for cache public and private routes for add users.
+[] Minify static file.
+

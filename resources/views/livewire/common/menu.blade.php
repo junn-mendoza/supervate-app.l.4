@@ -11,17 +11,9 @@ new class extends Component {
     }
     //
 }; ?>
-<div class="flex-1 w-screen h-screen ">
+<div class="flex-1 w-screen h-screen  overflow-x-hidden ">
 <flux:sidebar sticky collapsible class="bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-700">
-        {{-- <flux:sidebar.header>
-            <flux:sidebar.brand
-                href="#"
-                logo="https://fluxui.dev/img/demo/logo.png"
-                logo:dark="https://fluxui.dev/img/demo/dark-mode-logo.png"
-                name="Acme Inc."
-            />
-            <flux:sidebar.collapse class="in-data-flux-sidebar-on-desktop:not-in-data-flux-sidebar-collapsed-desktop:-mr-2" />
-        </flux:sidebar.header> --}}
+  
         
         <flux:sidebar.nav>
             @foreach($menus as $menu)
@@ -41,19 +33,6 @@ new class extends Component {
                     </div>
                 @endif
             @endforeach
-            {{-- <flux:header class="-ml-8">Library</flux:header>
-            <div class="ml-2">
-                <flux:sidebar.item href="#" current>Projects</flux:sidebar.item>
-                <flux:sidebar.item href="#">Favourites</flux:sidebar.item>
-                <flux:sidebar.item href="#">Shared with me</flux:sidebar.item>
-            </div>
-            <flux:header class="-ml-8">Account</flux:header>
-            <div class="ml-2">
-                <flux:sidebar.item href="#">Help</flux:sidebar.item>
-                <flux:sidebar.item href="#">Upgrade</flux:sidebar.item>
-                <flux:sidebar.item href="#">Settings</flux:sidebar.item>
-            </div> --}}
-          
         </flux:sidebar.nav>
         <flux:sidebar.spacer />
         <flux:sidebar.nav>
@@ -88,10 +67,12 @@ new class extends Component {
             </flux:menu>
         </flux:dropdown>
     </flux:header>
-    <flux:main>
-        <flux:heading size="xl" level="1">Good afternoon, Olivia</flux:heading>
-        <flux:text class="mt-2 mb-6 text-base">Here's what's new today</flux:text>
-        <flux:separator variant="subtle" />
+    <flux:main class="!m-0 !p-0">
+        <div class="px-6 py-3">
+            <flux:heading size="xl" level="1">Good afternoon, Olivia</flux:heading>
+            <flux:text class="mt-2 mb-6 text-base">Here's what's new today</flux:text>
+        </div>
+            <flux:separator variant="subtle" />
         {{$slot}}
     </flux:main>
 </div>
